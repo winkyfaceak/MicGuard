@@ -1,15 +1,15 @@
 # MicGuard
 
 A macOS menu bar app that holds the system input device on the built-in
-microphone, so connecting Bluetooth headphones doesn't hijack the mic — and
-doesn't drag the headphones into low-quality HFP mode along with it.
+microphone, so connecting Bluetooth headphones doesn't hijack the mic. Which doesn't
+drag the headphones into low-quality HFP mode along with it.
 
 Pick a different mic from the menu when you actually want one; that choice
 becomes the new preference and survives reconnects.
 
 ## Requirements
 
-Swift 6.x. **Full Xcode is not required** — this builds entirely with Command
+Swift 6.x. **Full Xcode is not required** - this builds entirely with Command
 Line Tools (`xcode-select --install`).
 
 ## Everyday commands
