@@ -1,4 +1,4 @@
-.PHONY: build test devices bundle run install uninstall clean
+.PHONY: build test devices icon bundle run install uninstall clean
 
 # Fast compile check while editing.
 build:
@@ -13,6 +13,11 @@ test:
 # picks the wrong device.
 devices:
 	@swift run MicGuardCheck devices
+
+# Rebuild Resources/MicGuard.icns from Resources/AppIcon.png.
+# Swap in your own 1024px PNG at that path and re-run.
+icon:
+	@./Scripts/icon.sh
 
 # Produce build/MicGuard.app — needed for the menu bar item and login item.
 bundle:

@@ -16,6 +16,10 @@
 	<string>0.1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<!-- Names Contents/Resources/MicGuard.icns. The .icns extension is
+	     omitted by convention; macOS appends it. -->
+	<key>CFBundleIconFile</key>
+	<string>MicGuard</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>14.0</string>
 	<key>NSHighResolutionCapable</key>

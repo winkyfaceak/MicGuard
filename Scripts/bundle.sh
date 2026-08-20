@@ -11,6 +11,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP="$ROOT/build/MicGuard.app"
 BUNDLE_ID="com.winkyfaceak.MicGuard"
 
+# Regenerate the .icns if the source art is newer than it.
+"$ROOT/Scripts/icon.sh" >/dev/null
+
 cd "$ROOT"
 swift build -c "$CONFIG"
 BIN="$(swift build -c "$CONFIG" --show-bin-path)/MicGuard"
@@ -19,6 +22,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
 cp "$BIN" "$APP/Contents/MacOS/MicGuard"
+cp "$ROOT/Resources/MicGuard.icns" "$APP/Contents/Resources/MicGuard.icns"
 cp "$ROOT/Resources/Info.plist" "$APP/Contents/Info.plist"
 
 # Ad-hoc signature ("-"). Enough for personal use on your own machine;

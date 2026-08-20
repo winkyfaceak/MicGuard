@@ -47,7 +47,10 @@ Sources/MicGuard/         the menu bar app
   LaunchAtLogin.swift          SMAppService wrapper
 
 Sources/MicGuardCheck/    assertions + live device dump (see Testing below)
+Scripts/make-icon.swift   renders the placeholder icon artwork
+Scripts/icon.sh           AppIcon.png -> MicGuard.icns
 Scripts/bundle.sh         wraps the binary into MicGuard.app
+Resources/AppIcon.png     1024px icon master — replace with your own
 Resources/Info.plist      bundle metadata
 ```
 
@@ -98,6 +101,39 @@ It isn't a `.testTarget` on purpose: Command Line Tools ships neither
 swift-testing nor XCTest, so `swift test` fails with `no such module 'Testing'`
 unless full Xcode is installed. If you do install Xcode later, the assertions
 in `MicGuardCheck/main.swift` map onto `@Test` functions almost line for line.
+
+## The app icon
+
+Replace `Resources/AppIcon.png` with your own 1024x1024 PNG and run `make icon`
+(or just `make run`, which regenerates it). Everything downstream is automatic.
+
+The chain is `AppIcon.png` -> `.iconset` -> `iconutil` -> `MicGuard.icns` ->
+`Contents/Resources/`, named by the `CFBundleIconFile` key in `Info.plist`.
+There is no asset-catalog option: `.xcassets` needs `actool`, which ships with
+Xcode rather than Command Line Tools.
+
+Three things worth knowing:
+
+- **Draw flat art.** macOS 26 applies its own Liquid Glass material — gloss,
+  depth, specular highlight — when compositing the icon. Shading it yourself
+  fights the system and looks doubled up.
+- **Ten sizes, not one.** `.icns` is a container. macOS picks 16pt for a Finder
+  list and 512pt for Get Info, so a single-size icon is blurry in nine places.
+  `Scripts/icon.sh` renders all ten and rejects source art under 1024px.
+- **The icon lives inside the signed bundle**, so it has to be copied in before
+  `codesign` runs. `bundle.sh` already orders it that way; if you add the icon
+  after signing you invalidate the signature.
+
+Because `LSUIElement` keeps the app out of the Dock, this icon shows up in
+Finder, Get Info, and System Settings -> Login Items. The *menu bar* icon is a
+separate thing — the `mic.fill` SF Symbol in `MicGuardApp.swift`.
+
+macOS caches icons aggressively. If a rebuild still looks blank, the file is
+usually fine and the cache is stale:
+
+```bash
+touch build/MicGuard.app && killall Dock Finder
+```
 
 ## Packaging notes
 
